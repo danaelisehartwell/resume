@@ -53,6 +53,13 @@
   .detail-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
   .detail-value { color: var(--ink); }
 
+  .fun-fact-bar { display: flex; align-items: center; gap: 14px; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .fun-fact-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+  .fun-fact-text { color: var(--muted); font-size: 12px; overflow: hidden; position: relative; height: 1.4em; flex: 1; }
+  .fun-fact-text span { position: absolute; top: 0; left: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease, transform 0.6s ease; white-space: nowrap; }
+  .fun-fact-text span.active { opacity: 1; transform: translateY(0); }
+  .fun-fact-text span.exit { opacity: 0; transform: translateY(-8px); }
+
   #skills { border-top: 1px solid var(--line); }
   .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
   .skill-group { background: var(--card); padding: 32px 28px; border: 1px solid var(--line); }
@@ -131,7 +138,7 @@
         <span class="contact-link-label">Get in touch</span>
         <span class="contact-link-arrow">→</span>
       </a>
-      <a href="Dana Hartwell Resume.pdf" class="contact-link">
+      <a href=".github/Dana Hartwell Resume.pdf" class="contact-link">
         <span class="contact-link-label">Download CV</span>
         <span class="contact-link-arrow">→</span>
       </a>
@@ -165,8 +172,22 @@
       </div>
       <div class="detail-item">
         <div class="detail-label">Contact</div>
-        <div class="detail-value">dana.elise.hartwell@gmail.com</div>
+        <div class="detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d2b6b3bcb3fcb7bebba1b7fcbab3a0a6a5b7bebe92b5bfb3bbbefcb1bdbf">[email&#160;protected]</a></div>
       </div>
+    </div>
+  </div>
+
+  <div class="fun-fact-bar reveal">
+    <span class="fun-fact-label">Fun fact</span>
+    <div class="fun-fact-text" id="funFact">
+      <span class="active">Played water polo in high school and college</span>
+      <span>Has a golden retriever named Rufus</span>
+      <span>Enjoys training for and competing in triathlons</span>
+      <span>Lives in a 100 year old historic home</span>
+      <span>Loves fun facts and useless trivia</span>
+      <span>Claude is my favorite AI agent</span>
+      <span>Fell in love with QA because I love solving puzzles</span>
+      <span>Has climbed two Colorado 14ers</span>
     </div>
   </div>
 </section>
@@ -329,7 +350,7 @@
   <div class="contact-inner reveal">
     <p class="contact-intro">I'm currently open to new opportunities in implementation, client solutions, or QA. Whether you have a role to discuss or just want to connect — I'd love to hear from you.</p>
     <div class="contact-links">
-      <a href="mailto:dana.elise.hartwell@gmail.com" class="contact-link">
+      <a href="/cdn-cgi/l/email-protection#462227282768232a2f3523682e27343231232a2a06212b272f2a6825292b" class="contact-link">
         <span class="contact-link-label">Email</span>
         <span class="contact-link-arrow">→</span>
       </a>
@@ -350,12 +371,23 @@
   <span>St. Petersburg, FL</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
+
+  // Fun fact rotator
+  const facts = document.querySelectorAll('#funFact span');
+  let current = 0;
+  setInterval(() => {
+    facts[current].classList.remove('active');
+    facts[current].classList.add('exit');
+    setTimeout(() => facts[current].classList.remove('exit'), 600);
+    current = (current + 1) % facts.length;
+    facts[current].classList.add('active');
+  }, 3000);
 </script>
 </body>
 </html>
