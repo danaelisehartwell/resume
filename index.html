@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dana Hartwell</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f5f0; --ink: #1a1814; --muted: #8a8680;
+    --accent: #c8602a; --line: #e0ddd8; --card: #ffffff;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.7; font-weight: 300; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(247,245,240,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; letter-spacing: 0.04em; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  section { padding: 100px 48px; max-width: 900px; margin: 0 auto; }
+
+  #hero {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding-top: 120px; max-width: 900px; margin: 0 auto; padding-left: 48px; padding-right: 48px;
+    opacity: 0; animation: fadeUp 0.9s ease 0.2s forwards;
+  }
+  .hero-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 8vw, 96px); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .hero-name em { font-style: italic; color: var(--accent); }
+  .hero-role { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 3vw, 28px); font-weight: 300; color: var(--muted); margin-bottom: 40px; font-style: italic; }
+  .hero-bio { max-width: 560px; color: var(--muted); margin-bottom: 48px; line-height: 1.9; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: var(--bg); padding: 14px 28px; text-decoration: none; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; transition: background 0.2s; }
+  .hero-cta:hover { background: var(--accent); }
+  .hero-divider { width: 48px; height: 1px; background: var(--accent); margin: 64px 0 0; }
+
+  .section-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 300; line-height: 1.1; margin-bottom: 48px; letter-spacing: -0.01em; }
+
+  #about { border-top: 1px solid var(--line); }
+  .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 64px; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 20px; line-height: 1.9; }
+  .about-details { display: flex; flex-direction: column; gap: 20px; }
+  .detail-item { border-top: 1px solid var(--line); padding-top: 16px; }
+  .detail-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .detail-value { color: var(--ink); }
+
+  #skills { border-top: 1px solid var(--line); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .skill-group { background: var(--card); padding: 32px 28px; border: 1px solid var(--line); }
+  .skill-group-title { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .skill-tag { display: inline-block; margin: 0 6px 8px 0; font-size: 12px; color: var(--muted); }
+  .skill-tag::before { content: '— '; color: var(--line); }
+
+  #experience { border-top: 1px solid var(--line); }
+  .exp-item { display: grid; grid-template-columns: 140px 1fr; gap: 32px; padding: 36px 0; border-bottom: 1px solid var(--line); }
+  .exp-item:first-of-type { border-top: 1px solid var(--line); }
+  .exp-meta { padding-top: 3px; }
+  .exp-period { color: var(--muted); font-size: 11px; }
+  .exp-company { color: var(--accent); margin-top: 6px; font-size: 11px; letter-spacing: 0.05em; }
+  .exp-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; margin-bottom: 12px; line-height: 1.2; }
+  .exp-desc { color: var(--muted); line-height: 1.9; }
+
+  #projects { border-top: 1px solid var(--line); }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .project-card { background: var(--card); border: 1px solid var(--line); padding: 36px 32px; transition: border-color 0.2s, transform 0.2s; }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .project-num { font-size: 10px; letter-spacing: 0.2em; color: var(--line); margin-bottom: 20px; }
+  .project-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; margin-bottom: 12px; }
+  .project-desc { color: var(--muted); line-height: 1.9; margin-bottom: 24px; font-size: 12px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .project-tag { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); padding: 4px 10px; }
+
+  #contact { border-top: 1px solid var(--line); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .contact-intro { color: var(--muted); line-height: 1.9; max-width: 340px; }
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+  .contact-link { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: color 0.2s; }
+  .contact-link:first-child { border-top: 1px solid var(--line); }
+  .contact-link:hover { color: var(--accent); }
+  .contact-link-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .contact-link-arrow { font-size: 18px; }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 700px) {
+    nav { padding: 16px 20px; }
+    .nav-links { gap: 16px; }
+    section { padding: 72px 20px; }
+    #hero { padding-left: 20px; padding-right: 20px; }
+    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 36px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">Dana Hartwell</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <p class="hero-label">Portfolio &amp; Resume</p>
+  <h1 class="hero-name">Dana<br><em>Hartwell</em></h1>
+  <p class="hero-role">Implementation &amp; Client Solutions Engineer</p>
+  <p class="hero-bio">7+ years driving enterprise SaaS onboarding, quality assurance, and client advocacy — turning complex technical implementations into seamless, lasting client success.</p>
+  <a href="#contact" class="hero-cta">Get in touch →</a>
+  <div class="hero-divider"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">01 — About</p>
+    <h2 class="section-title">A little about<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;">who I am</em></h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>I'm an implementation and client solutions professional with over 7 years of experience in enterprise SaaS. I specialize in onboarding, technical integration, quality assurance, and cross-functional project delivery — with a consistent track record of keeping complex launches on time and on scope.</p>
+      <p>I've worked across multiple departments — client support, QA engineering, and solutions engineering — which gives me a rare, holistic view of the full product and client lifecycle. I'm equally comfortable in a stakeholder meeting, a QA test suite, or a technical integration session.</p>
+      <p>I'm passionate about building processes that create exceptional client experiences and drive long-term adoption. If there's a gap, I'll find it and fill it.</p>
+    </div>
+    <div class="about-details">
+      <div class="detail-item">
+        <div class="detail-label">Based in</div>
+        <div class="detail-value">St. Petersburg, FL</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Available for</div>
+        <div class="detail-value">Full-time Opportunities</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Education</div>
+        <div class="detail-value">B.S. Public Relations<br>University of Florida</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Contact</div>
+        <div class="detail-value">dana.elise.hartwell@gmail.com</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <p class="section-label">02 — Skills</p>
+    <h2 class="section-title">What I bring<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;">to the table</em></h2>
+  </div>
+  <div class="skills-grid reveal">
+    <div class="skill-group">
+      <div class="skill-group-title">Implementation & Client</div>
+      <span class="skill-tag">SaaS Onboarding</span>
+      <span class="skill-tag">Requirements Gathering</span>
+      <span class="skill-tag">Client Training</span>
+      <span class="skill-tag">Technical Integrations</span>
+      <span class="skill-tag">CMS Configuration</span>
+      <span class="skill-tag">Data Integration</span>
+      <span class="skill-tag">Stakeholder Management</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Quality Assurance</div>
+      <span class="skill-tag">Manual Testing</span>
+      <span class="skill-tag">Test Plan Development</span>
+      <span class="skill-tag">Regression Testing</span>
+      <span class="skill-tag">API Testing</span>
+      <span class="skill-tag">Cypress (Automation)</span>
+      <span class="skill-tag">SQL Validation</span>
+      <span class="skill-tag">Defect Triage</span>
+      <span class="skill-tag">Agile / Scrum</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Tools & Platforms</div>
+      <span class="skill-tag">Jira</span>
+      <span class="skill-tag">Postman</span>
+      <span class="skill-tag">GitHub</span>
+      <span class="skill-tag">Snowflake</span>
+      <span class="skill-tag">DataDog</span>
+      <span class="skill-tag">Figma</span>
+      <span class="skill-tag">HubSpot</span>
+      <span class="skill-tag">Confluence</span>
+      <span class="skill-tag">TestRail / Qase</span>
+      <span class="skill-tag">BrowserStack</span>
+      <span class="skill-tag">MS SQL Server</span>
+      <span class="skill-tag">Looker</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="reveal">
+    <p class="section-label">03 — Experience</p>
+    <h2 class="section-title">Where I've<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;">worked</em></h2>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-meta">
+      <div class="exp-period">May 2025 – Oct 2025</div>
+      <div class="exp-company">Powerchord, Inc.</div>
+    </div>
+    <div>
+      <div class="exp-title">Client Solutions Engineer</div>
+      <div class="exp-desc">Served as primary client contact during project implementations, aligning scope, requirements, timelines, and technical integrations. Managed multi-team meetings across engineering, data, product, and QA. Executed platform configuration including CMS updates, data integration settings, and feature enablement. Delivered client training, product demos, and onboarding documentation to drive adoption.</div>
+    </div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-meta">
+      <div class="exp-period">Apr 2022 – May 2025</div>
+      <div class="exp-company">Powerchord, Inc.</div>
+    </div>
+    <div>
+      <div class="exp-title">Junior QA Engineer</div>
+      <div class="exp-desc">Owned manual testing for desktop and mobile environments supporting global enterprise ecommerce clients. Developed and executed test plans across regression, functional, integration, smoke, API, and compatibility testing. Utilized SQL to validate data accuracy, contributed to Cypress automation, and managed releases via GitHub and Octopus. Led defect triage and maintained documentation in Confluence.</div>
+    </div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-meta">
+      <div class="exp-period">Nov 2017 – Apr 2022</div>
+      <div class="exp-company">Powerchord, Inc.</div>
+    </div>
+    <div>
+      <div class="exp-title">Senior Client Support Specialist</div>
+      <div class="exp-desc">Managed client requests via ticketing system, email, and phone — de-escalating issues and providing workarounds. Collaborated across teams to prioritize feature requests and bug fixes. Assisted with client training, onboarding, and platform migrations. Built internal and external documentation that became foundational to team operations.</div>
+    </div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-meta">
+      <div class="exp-period">2010 – 2017</div>
+      <div class="exp-company">Insurance Industry</div>
+    </div>
+    <div>
+      <div class="exp-title">Underwriter & Account Executive</div>
+      <div class="exp-desc">Held progressive roles at Socius Insurance Services, Hull & Company, and National Risk Solutions. Developed strong stakeholder and client management skills through work requiring negotiation, requirements gathering, documentation, and cross-department collaboration.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">04 — Projects & Highlights</p>
+    <h2 class="section-title">Selected<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;">work</em></h2>
+  </div>
+  <div class="projects-grid reveal">
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <div class="project-title">Enterprise SaaS Implementations</div>
+      <div class="project-desc">Led end-to-end onboarding projects for enterprise clients — coordinating across engineering, data, QA, and account teams to deliver launches on scope and on time.</div>
+      <div class="project-tags">
+        <span class="project-tag">Implementation</span>
+        <span class="project-tag">Cross-functional</span>
+        <span class="project-tag">Client Success</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <div class="project-title">QA Test Infrastructure</div>
+      <div class="project-desc">Built and maintained comprehensive manual test plans across regression, API, smoke, and compatibility testing for localized ecommerce platforms serving global enterprise clients.</div>
+      <div class="project-tags">
+        <span class="project-tag">QA</span>
+        <span class="project-tag">Test Plans</span>
+        <span class="project-tag">Cypress</span>
+        <span class="project-tag">SQL</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">03</div>
+      <div class="project-title">Client Onboarding Documentation</div>
+      <div class="project-desc">Developed training materials, onboarding guides, and internal knowledge bases in Confluence that accelerated client readiness and reduced time-to-adoption.</div>
+      <div class="project-tags">
+        <span class="project-tag">Documentation</span>
+        <span class="project-tag">Training</span>
+        <span class="project-tag">Confluence</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">04</div>
+      <div class="project-title">Tier 2 Technical Support</div>
+      <div class="project-desc">Resolved complex platform issues as Tier 2 escalation point — diagnosing root causes, coordinating with engineering, and maintaining platform reliability for enterprise clients.</div>
+      <div class="project-tags">
+        <span class="project-tag">Technical Support</span>
+        <span class="project-tag">DataDog</span>
+        <span class="project-tag">Postman</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">05 — Contact</p>
+    <h2 class="section-title">Let's work<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;">together</em></h2>
+  </div>
+  <div class="contact-inner reveal">
+    <p class="contact-intro">I'm currently open to new opportunities in implementation, client solutions, or QA. Whether you have a role to discuss or just want to connect — I'd love to hear from you.</p>
+    <div class="contact-links">
+      <a href="mailto:dana.elise.hartwell@gmail.com" class="contact-link">
+        <span class="contact-link-label">Email</span>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="tel:9548732374" class="contact-link">
+        <span class="contact-link-label">Phone</span>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="#" class="contact-link">
+        <span class="contact-link-label">LinkedIn</span>
+        <span class="contact-link-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Dana Hartwell</span>
+  <span>St. Petersburg, FL</span>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
