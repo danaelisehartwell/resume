@@ -53,13 +53,6 @@
   .detail-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
   .detail-value { color: var(--ink); }
 
-  .fun-fact-bar { display: flex; align-items: center; gap: 14px; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
-  .fun-fact-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
-  .fun-fact-text { color: var(--muted); font-size: 12px; overflow: hidden; position: relative; height: 1.4em; flex: 1; }
-  .fun-fact-text span { position: absolute; top: 0; left: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease, transform 0.6s ease; white-space: nowrap; }
-  .fun-fact-text span.active { opacity: 1; transform: translateY(0); }
-  .fun-fact-text span.exit { opacity: 0; transform: translateY(-8px); }
-
   #skills { border-top: 1px solid var(--line); }
   .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
   .skill-group { background: var(--card); padding: 32px 28px; border: 1px solid var(--line); }
@@ -98,13 +91,27 @@
 
   footer { border-top: 1px solid var(--line); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; }
 
+  .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; flex-direction: column; gap: 5px; }
+  .nav-hamburger span { display: block; width: 22px; height: 1px; background: var(--ink); transition: transform 0.3s ease, opacity 0.3s ease; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   @media (max-width: 700px) {
-    nav { padding: 16px 20px; }
-    .nav-links { gap: 16px; }
+    nav { padding: 16px 20px; align-items: center; flex-wrap: wrap; }
+    .nav-hamburger { display: flex; }
+    .nav-links {
+      display: none; flex-direction: column; gap: 0;
+      width: 100%; margin-top: 12px;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { border-top: 1px solid var(--line); }
+    .nav-links li:last-child { border-bottom: 1px solid var(--line); }
+    .nav-links a { display: block; padding: 14px 0; font-size: 12px; letter-spacing: 0.12em; }
     section { padding: 72px 20px; }
     #hero { padding-left: 20px; padding-right: 20px; }
     .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 36px; }
@@ -118,7 +125,10 @@
 
 <nav>
   <a href="#hero" class="nav-logo">Dana Hartwell</a>
-  <ul class="nav-links">
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
@@ -172,22 +182,8 @@
       </div>
       <div class="detail-item">
         <div class="detail-label">Contact</div>
-        <div class="detail-value"><dana.elise.hartwell@gmail.com</div>
+        <div class="detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="096d686768276c65607a6c2761687b7d7e6c6565496e64686065276a6664">[email&#160;protected]</a></div>
       </div>
-    </div>
-  </div>
-
-  <div class="fun-fact-bar reveal">
-    <span class="fun-fact-label">Fun fact</span>
-    <div class="fun-fact-text" id="funFact">
-      <span class="active">Played water polo in high school and college</span>
-      <span>Has a golden retriever named Rufus</span>
-      <span>Enjoys training for and competing in triathlons</span>
-      <span>Lives in a 100 year old historic home</span>
-      <span>Loves fun facts and useless trivia</span>
-      <span>Claude is my favorite AI agent</span>
-      <span>Fell in love with QA because I love solving puzzles</span>
-      <span>Has climbed two Colorado 14ers</span>
     </div>
   </div>
 </section>
@@ -350,7 +346,7 @@
   <div class="contact-inner reveal">
     <p class="contact-intro">I'm currently open to new opportunities in implementation, client solutions, or QA. Whether you have a role to discuss or just want to connect — I'd love to hear from you.</p>
     <div class="contact-links">
-      <a href="mailto:dana.elise.hartwell@gmail.com" class="contact-link">
+      <a href="/cdn-cgi/l/email-protection#583c393639763d34312b3d7630392a2c2f3d3434183f35393134763b3735" class="contact-link">
         <span class="contact-link-label">Email</span>
         <span class="contact-link-arrow">→</span>
       </a>
@@ -372,11 +368,27 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
 
   // Fun fact rotator
   const facts = document.querySelectorAll('#funFact span');
@@ -387,7 +399,7 @@
     setTimeout(() => facts[current].classList.remove('exit'), 600);
     current = (current + 1) % facts.length;
     facts[current].classList.add('active');
-  }, 3000);
+  }, 4000);
 </script>
 </body>
 </html>
