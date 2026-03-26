@@ -50,15 +50,24 @@
   .about-text p { color: var(--muted); margin-bottom: 20px; line-height: 1.9; }
   .about-details { display: flex; flex-direction: column; gap: 20px; }
   .detail-item { border-top: 1px solid var(--line); padding-top: 16px; }
+  .detail-item:last-child { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
   .detail-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
   .detail-value { color: var(--ink); }
+
+  .fun-fact-bar { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line);}
+  .fun-fact-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .fun-fact-text { color: var(--ink); font-size: 12px; overflow: hidden; position: relative; height: 4em; width: 100%;border-bottom: 1px solid var(--line); padding-top: 16px; padding-bottom: 20px; line-height: 1.3 }
+  .fun-fact-text span { position: absolute; top: 0; left: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fun-fact-text span.active { opacity: 1; transform: translateY(0); }
+  .fun-fact-text span.exit { opacity: 0; transform: translateY(-8px); }
+  
 
   #skills { border-top: 1px solid var(--line); }
   .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
   .skill-group { background: var(--card); padding: 32px 28px; border: 1px solid var(--line); }
   .skill-group-title { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
   .skill-tag { display: inline-block; margin: 0 6px 8px 0; font-size: 12px; color: var(--muted); }
-  .skill-tag::before { content: '— '; color: var(--line); }
+  .skill-tag::before { content: '* '; color: var(--line); }
 
   #experience { border-top: 1px solid var(--line); }
   .exp-item { display: grid; grid-template-columns: 140px 1fr; gap: 32px; padding: 36px 0; border-bottom: 1px solid var(--line); }
@@ -180,12 +189,25 @@
         <div class="detail-label">Education</div>
         <div class="detail-value">B.S. Public Relations<br>University of Florida</div>
       </div>
-      <div class="detail-item">
-        <div class="detail-label">Contact</div>
-        <div class="detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="096d686768276c65607a6c2761687b7d7e6c6565496e64686065276a6664">[email&#160;protected]</a></div>
-      </div>
+  <div class="fun-fact-bar reveal">
+    <span class="fun-fact-label">Fun Facts</span>
+    <div class="fun-fact-text" id="funFact">
+      <span class="active">Has a golden retriever named Rufus</span>
+      <span>Played water polo in high school and college</span>
+      <span>Enjoys training for and competing in triathlons</span>
+      <span>Lives in a 100 year old historic home</span>
+      <span>Loves fun facts and useless trivia</span>
+      <span>Current favorite AI agent is Claude</span>
+      <span>Loves solving technical puzzles</span>
+      <span>Has climbed two Colorado 14ers</span>
+	  <span>Enjoys silly fitness trends</span>
+	  <span>Is an avid reader</span>
+	  <span>Thinks a hot dog is a sandwhich</span>
+	  <span>Is Green Bay Packers owner</span>
     </div>
+	</div>
   </div>
+   </div>
 </section>
 
 <!-- SKILLS -->
@@ -346,7 +368,7 @@
   <div class="contact-inner reveal">
     <p class="contact-intro">I'm currently open to new opportunities in implementation, client solutions, or QA. Whether you have a role to discuss or just want to connect — I'd love to hear from you.</p>
     <div class="contact-links">
-      <a href="/cdn-cgi/l/email-protection#583c393639763d34312b3d7630392a2c2f3d3434183f35393134763b3735" class="contact-link">
+      <a href="mailto:dana.elise.hartwell@gmail.com" class="contact-link">
         <span class="contact-link-label">Email</span>
         <span class="contact-link-arrow">→</span>
       </a>
@@ -368,7 +390,6 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-<script>
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
